@@ -80,13 +80,25 @@ After agents report back, check for:
 
 See `references/conflict-resolution.md` for detailed protocols.
 
-### Phase 5 — Synthesize
+### Phase 5 — Quick Verify
+
+Before reporting, do a lightweight sanity check on the changes:
+1. If backend changed: run the linter (`ruff check` or project equivalent) and type checker
+2. If frontend changed: run `npx tsc --noEmit` and `npm run build`
+3. If tests exist: run the test suite
+4. Scan the diff for obvious issues: hardcoded secrets, debug prints, TODO comments, broken imports
+
+If any check fails, fix it directly (don't spawn another agent for trivial fixes). If it's a real bug, spawn the QA agent to diagnose.
+
+For thorough multi-angle review with improvement cycles, use `/dev-team-full` instead.
+
+### Phase 6 — Synthesize
 
 Combine agent outputs into one coherent result:
 1. Merge file changes (resolve overlaps from Phase 4)
 2. Summarize what was done and why
-3. List deferred items and known trade-offs
-4. Include QA report
+3. Quick verify results (pass/fail)
+4. List deferred items and known trade-offs
 5. Recommend next steps
 
 ## Context Maintenance
