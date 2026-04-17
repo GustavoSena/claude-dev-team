@@ -1,78 +1,143 @@
 ---
 name: dev-grill
 description: >
-  Stress-test a plan, feature design, or implementation by grilling it from every
-  angle: architecture, product, UX, security, edge cases, scalability. Interviews
-  you one question at a time, checks the codebase before asking, and provides a
-  recommended answer for each question. Use when: "grill me on this plan", "stress
-  test this design", "poke holes in this approach", "what am I missing?", "challenge
-  my assumptions", or before committing to a significant implementation.
+  Stress-test a plan, feature, or architecture decision by grilling the user from
+  every angle. Produces two outputs: (1) documentation that gets committed (decisions,
+  architecture, user flows) and (2) a local implementation plan (.claude/plans/).
+  Use when: "grill me on this plan", "stress test this design", "challenge my
+  assumptions", "what am I missing?", or before committing to a big feature.
 ---
 
-# Dev Grill — Stress-Test Mode
+# Dev Grill — Stress-Test & Document
 
-Interview the user relentlessly about their plan, design, or implementation from every specialist angle until all branches of the decision tree are resolved.
+Interview the user about their plan from every specialist angle. Resolve every branch of the decision tree. Then produce documentation and an implementation plan.
 
-## How This Works
+## Phase 1 — Interview
 
-1. Ask questions **one at a time**
-2. Before asking a question that the codebase could answer, **check the codebase first** using Read, Grep, Glob — then present what you found as context for a sharper question
-3. For each question, provide your **recommended answer** based on what you know about the project and general best practices
-4. Walk down each branch of the design tree, resolving dependencies between decisions
-5. Group questions by concern area (see below) but follow the natural flow of the conversation — don't force a rigid order
+Ask questions **one at a time**. For each question:
+1. **Check the codebase first** — use Read, Grep, Glob to find relevant code, then present what you found as context
+2. **Provide your recommended answer** based on what you know about the project
+3. **Wait for the user's response** before moving on
 
-## Concern Areas to Cover
+### Focus areas (adapt to what the user is planning):
 
-Work through these lenses, adapting to whatever the user is planning:
+**User-Facing Behavior**
+- What does the user see? What's the step-by-step workflow?
+- What happens on first use vs. returning use?
+- What does the loading state look like? The error state? The empty state?
+- What feedback does the user get for each action?
+- How does this work on mobile?
 
-### Product & Scope
-- Who is the user? What's the workflow?
-- What does "done" look like? What's explicitly out of scope?
+**Product Scope**
+- What does "done" look like? What's explicitly NOT included?
 - What's the MVP vs the ideal version?
-- What happens if a dependency isn't ready?
+- Who is this for? What's their motivation?
 
-### Architecture & Data
+**Architecture & Data**
 - How does data flow through the system?
-- What are the API contracts? Do both sides agree?
-- Where does state live? How is it synchronized?
-- What are the module boundaries? Is the dependency direction correct?
-- Does this create tech debt? Is that acceptable?
+- What are the API contracts? What shape is the request/response?
+- Where does state live? Client, server, or both?
+- Does this create new dependencies between modules?
+- What gets cached? For how long?
 
-### Edge Cases & Error Handling
-- What happens when the external service is down?
-- What if the input is empty? Malformed? Enormous?
-- What if two users do this simultaneously?
-- What does the error message say? Is it actionable?
-- What's the timeout behavior? What gets cached?
+**Edge Cases & Failure**
+- What if the external service is down? Slow? Returns garbage?
+- What if the input is empty? Huge? Unicode? Malicious?
+- What about concurrent users doing the same thing?
+- What's the timeout behavior?
 
-### UX & Accessibility
-- What does the user see while waiting?
-- What happens on mobile? On slow connections?
-- Is this keyboard-navigable? Screen-reader friendly?
-- Is the copy clear and actionable?
-- Does the layout shift when data loads?
-
-### Security & Operations
-- Is there user input that reaches a query or command?
-- Are secrets properly managed?
-- What happens at scale? What's the bottleneck?
-- How do you monitor if this is working?
+**Security & Ops**
+- Does user input reach a query, command, or file path?
+- How do you know this is working in production?
 - What's the rollback plan?
 
-### Testing
-- How would you test this? Unit, integration, E2E?
-- What's the hardest thing to test here?
+**Testing**
+- How would you test this? What's hard to test?
 - What would a regression look like?
 
-## When to Stop
+### When to stop interviewing
 
-Stop when:
-- All branches of the decision tree are resolved
-- The user says they're satisfied
-- You've covered all concern areas relevant to the plan
+Stop when all branches relevant to the plan are resolved, or when the user says they're satisfied.
 
-Then summarize: list every decision made, open questions remaining, and recommended next steps. If the user wants to proceed with implementation, suggest whether to use `/dev-team` (fast) or `/dev-team-full` (thorough).
+## Phase 2 — Produce Outputs
+
+After the interview, produce TWO outputs:
+
+### Output A: Documentation (committed to git)
+
+Create or update documentation files in the project. Choose the right format:
+
+| What was grilled | File to write | Location |
+|-----------------|---------------|----------|
+| Feature design | `docs/features/<feature-name>.md` | Project docs |
+| Architecture decision | `docs/adr/<number>-<title>.md` | Project docs |
+| User flow / UX | `docs/flows/<flow-name>.md` | Project docs |
+| API design | `docs/api/<endpoint-group>.md` | Project docs |
+
+Documentation format:
+```markdown
+# <Title>
+
+## Context
+Why this decision/feature is needed.
+
+## Decisions Made
+- Decision 1: [what was decided] — [rationale]
+- Decision 2: [what was decided] — [rationale]
+
+## Scope
+**In scope:** [what's included]
+**Out of scope:** [what's explicitly excluded]
+
+## User Flow (if applicable)
+1. User does X
+2. System responds with Y
+3. ...
+
+## API Contract (if applicable)
+[endpoint, request/response shapes]
+
+## Open Questions
+- [anything unresolved from the interview]
+```
+
+Create the `docs/` directory if it doesn't exist. This documentation is meant to be committed and shared with the team.
+
+### Output B: Implementation Plan (local only)
+
+Write an implementation plan to `.claude/plans/<descriptive-name>.md`. This file stays local (gitignored) and can be used by `/dev-team` or `/dev-team-full` to execute.
+
+Implementation plan format:
+```markdown
+# Implementation Plan: <Title>
+
+## Steps
+1. [specific step — which agent, which files, what to do]
+2. [next step]
+3. ...
+
+## Files to Create/Modify
+- `path/to/file` — what changes
+
+## Acceptance Criteria
+1. [testable criterion]
+2. [testable criterion]
+
+## Dependencies
+- [what must exist before starting]
+
+## Suggested Command
+/dev-team-full [task description derived from this plan]
+```
+
+## Phase 3 — Handoff
+
+After writing both outputs, tell the user:
+1. What documentation was created (paths)
+2. What the implementation plan is (path)
+3. Suggest the right command to execute: `/dev-team` for simple plans, `/dev-team-full` for complex ones
+4. If there are open questions, list them and suggest resolving before implementing
 
 ## Tone
 
-Be direct and challenging but constructive. The goal is to find blind spots, not to criticize. When you spot a potential issue, explain WHY it matters and what could go wrong, then offer a solution.
+Direct and challenging but constructive. Find blind spots, not faults. When you spot an issue, explain WHY it matters and offer a solution.

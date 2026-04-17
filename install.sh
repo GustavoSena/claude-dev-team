@@ -40,20 +40,27 @@ mkdir -p "$CLAUDE_DIR/agents"
 mkdir -p "$CLAUDE_DIR/skills"
 mkdir -p "$CLAUDE_DIR/context"
 
-# Ensure context directory is gitignored
+# Ensure local-only directories are gitignored
 GITIGNORE="$TARGET/.gitignore"
-if [ -f "$GITIGNORE" ]; then
-  if ! grep -q '.claude/context/' "$GITIGNORE" 2>/dev/null; then
-    echo "" >> "$GITIGNORE"
-    echo "# Agent working memory (machine-local, not shared)" >> "$GITIGNORE"
-    echo ".claude/context/" >> "$GITIGNORE"
-    echo "  ADD   .gitignore entry for .claude/context/"
+add_gitignore_entry() {
+  local pattern="$1"
+  local comment="$2"
+  if [ -f "$GITIGNORE" ]; then
+    if ! grep -q "$pattern" "$GITIGNORE" 2>/dev/null; then
+      echo "" >> "$GITIGNORE"
+      [ -n "$comment" ] && echo "# $comment" >> "$GITIGNORE"
+      echo "$pattern" >> "$GITIGNORE"
+      echo "  ADD   .gitignore entry for $pattern"
+    fi
+  else
+    [ -n "$comment" ] && echo "# $comment" > "$GITIGNORE"
+    echo "$pattern" >> "$GITIGNORE"
+    echo "  ADD   .gitignore with $pattern"
   fi
-else
-  echo "# Agent working memory (machine-local, not shared)" > "$GITIGNORE"
-  echo ".claude/context/" >> "$GITIGNORE"
-  echo "  ADD   .gitignore with .claude/context/"
-fi
+}
+
+add_gitignore_entry ".claude/context/" "Agent working memory (machine-local, not shared)"
+add_gitignore_entry ".claude/plans/" "Implementation plans (machine-local, not shared)"
 
 # Copy agents
 for agent_file in "$SCRIPT_DIR/agents/"*.md; do
