@@ -49,6 +49,7 @@ After implementation, run ALL of these in sequence:
 6. **QA agent**: run linter, type checker, tests. Write new tests for the changes. Report pass/fail for each acceptance criterion.
 7. **UX agent**: review any UI changes for usability, accessibility, copy quality. Score each finding as critical/high/medium/low.
 8. **Architecture agent**: review the implementation against the technical approach. Flag any deviations, missing error handling, or structural issues.
+9. **Design comparison** (if applicable): see "Visual Design Comparison" section below.
 
 ### Phase 4 — Classify
 
@@ -101,6 +102,44 @@ Present a structured report:
 ### Remaining Issues (if any)
 - [issues that weren't resolved within 3 rounds]
 ```
+
+## Visual Design Comparison
+
+When the task involves UI changes AND design references exist (Figma, screenshots, mockups), add a visual comparison step to the review round:
+
+### How to check for designs
+
+1. Check the task description for Figma URLs, image links, or references to designs
+2. Check `.claude/context/product.md` or `.claude/context/frontend.md` for previously noted design sources
+3. Check `docs/` for design specs or flow diagrams
+4. If a Figma MCP is configured (check `.mcp.json`), use it to fetch the relevant frames
+
+### Comparison process
+
+1. **Capture implementation**: take a screenshot of the implemented UI using the Preview MCP (`mcp__Claude_Preview__preview_screenshot`) or the Chrome MCP (`mcp__Claude_in_Chrome__computer`). If neither is available, ask the user to provide a screenshot.
+2. **Get the design reference**: fetch the Figma frame via MCP, or read the design spec from `docs/`, or use a provided image/URL.
+3. **Compare**: evaluate the implementation against the design on these axes:
+
+| Axis | What to check |
+|------|--------------|
+| Layout | Element positioning, spacing, grid alignment |
+| Typography | Font sizes, weights, line heights, hierarchy |
+| Colors | Background, text, border colors match design tokens |
+| States | Hover, active, disabled, loading, empty, error states |
+| Responsive | Does it match the design at mobile and desktop breakpoints? |
+| Missing elements | Anything in the design that wasn't implemented |
+| Extra elements | Anything implemented that isn't in the design |
+
+4. **Report**: for each deviation, classify as:
+   - **Intentional** — deviation was a conscious decision (document why)
+   - **Bug** — should match the design (route to frontend agent for fixing)
+   - **Ambiguous** — design doesn't specify this clearly (flag for user decision)
+
+Include the comparison in the final report under a "### Design Comparison" section.
+
+### If no designs exist
+
+Skip this step. Note in the report: "No design references available — visual review was subjective."
 
 ## Context Maintenance
 

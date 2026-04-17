@@ -1,49 +1,39 @@
 # Claude Dev Team
 
-A portable multi-agent development team for [Claude Code](https://claude.ai/code). Install into any project to get specialized agents for backend, frontend, UX, infrastructure, architecture, QA, and product — with three orchestration modes for different situations.
+A portable multi-agent development team for [Claude Code](https://claude.ai/code). Install into any project to get specialized agents for backend, frontend, UX, infrastructure, architecture, QA, and product — with multiple orchestration modes and a one-command onboarding flow.
 
 ## Quick Start
 
 ```bash
-# Install into your project
+# 1. Install into your project
 ./install.sh /path/to/your/project
 
-# Update after pulling new templates
-./install.sh --update /path/to/your/project
+# 2. Start Claude Code in your project, then onboard:
+/dev-setup                              # Reads project, asks questions, prefills context
 
-# Start Claude Code in your project, then use:
+# 3. Use the team:
 /dev-team Build a new feature               # Implement + quick verify
 /dev-team-full Ship-quality implementation   # Implement → review → iterate
-/dev-grill Stress-test my plan              # Grill me on every angle
+/dev-grill Stress-test my plan              # Challenge every assumption
 ```
 
-## Three Orchestration Modes
+## Commands
 
-### `/dev-team` — Standard (implement + quick verify)
+### Setup & Planning
 
-The fast path. Analyzes the task, spawns the right specialist agents, resolves conflicts, runs a quick sanity check (lint, types, build), and reports. Use for most tasks.
+| Command | What it does |
+|---------|-------------|
+| `/dev-setup` | **Project onboarding.** Reads docs and code, asks about your scope, tickets, designs, docs platforms. Prefills all agent context files. Run once after installing. |
+| `/dev-grill` | **Stress-test a plan.** Grills you one question at a time from every angle. Produces documentation (committed) and implementation plans (local). |
 
-### `/dev-team-full` — Thorough (implement → review → iterate)
+### Orchestration
 
-The rigorous path. After implementation, runs three reviews in sequence:
-1. **QA agent** — tests, linting, acceptance criteria pass/fail
-2. **UX agent** — usability, accessibility, copy quality scoring
-3. **Architecture agent** — structural review against the design
+| Command | What it does |
+|---------|-------------|
+| `/dev-team` | **Standard flow.** Analyze → delegate → implement → quick verify (lint, types, build). Fast. |
+| `/dev-team-full` | **Thorough flow.** Implement → QA review → UX review → Architecture review → design comparison → classify as Ship/Improve/Rethink → iterate fixes (max 3 rounds). Includes visual design comparison against Figma/mockups when available. |
 
-Classifies the result as **Ship** / **Improve** / **Rethink**:
-- **Ship**: all criteria pass, no critical issues → done
-- **Improve**: issues found → routes fixes to the right agents, re-reviews (max 3 rounds)
-- **Rethink**: fundamental problems → presents to user for direction
-
-Use for features that need to be solid before shipping.
-
-### `/dev-grill` — Stress-test a plan
-
-Interviews you one question at a time about your plan, design, or approach. Checks the codebase before asking each question. Covers: product scope, architecture, edge cases, UX, security, testing. Provides a recommended answer for each question.
-
-Use before committing to a big implementation, or when you want to find blind spots.
-
-## Individual Skills
+### Individual Specialists
 
 | Command | Role | Writes code? |
 |---------|------|-------------|
@@ -59,25 +49,40 @@ Use before committing to a big implementation, or when you want to find blind sp
 
 | Situation | Command |
 |-----------|---------|
+| Just installed, first time | `/dev-setup` |
+| Before a big feature | `/dev-grill` |
 | Simple single-domain change | `/dev-backend`, `/dev-frontend`, etc. |
 | Multi-domain feature (fast) | `/dev-team` |
 | Ship-quality feature (thorough) | `/dev-team-full` |
-| Before starting a big feature | `/dev-grill` |
 | Bug fix | `/dev-backend` or `/dev-frontend` |
-| "Is this page usable?" | `/dev-ux` |
-| "What should we build?" | `/dev-product` |
+
+## Onboarding Flow (`/dev-setup`)
+
+When you run `/dev-setup`, it:
+
+1. **Reads everything available** — CLAUDE.md, README, docs/, package.json, .mcp.json, CI config
+2. **Asks only what it can't find** — your scope (whole project or specific sections?), ticket management (GitHub Issues, Linear, Jira?), design tools (Figma?), doc platforms (Notion?), deployment, decision style
+3. **Prefills all 7+ context files** — so every agent starts with full project awareness
+4. **Discovers integrations** — notes which MCP servers are configured and which might need setup
+
+This means the first `/dev-team` invocation after setup is fast — agents already know the codebase.
+
+## Design Comparison (`/dev-team-full`)
+
+When UI changes are involved and design references exist, `/dev-team-full` adds a visual comparison step:
+
+1. Captures a screenshot of the implementation (via Preview MCP, Chrome MCP, or user-provided)
+2. Fetches the design reference (Figma MCP, design spec in docs, or provided image)
+3. Compares on: layout, typography, colors, states, responsiveness, missing/extra elements
+4. Classifies each deviation as **Intentional**, **Bug** (route to frontend), or **Ambiguous** (ask user)
+
+This only runs when designs are available. If none exist, it's skipped with a note.
 
 ## How It Works
 
 - **Skills** (`.claude/skills/dev-*/SKILL.md`) — slash commands that set specialist thinking
 - **Agents** (`.claude/agents/*.md`) — subagents spawned by orchestrators with restricted tools and worktree isolation
 - **Context files** (`.claude/context/<role>.md`) — per-role working memory, read at start, written at end, saves tokens on re-exploration
-
-## Customizing for Your Project
-
-1. **Edit agent prompts** — replace generic tech references with your stack
-2. **Ensure CLAUDE.md is comprehensive** — all agents read it first
-3. **Add reference files** — put project-specific patterns in `skills/dev-*/references/`
 
 ## Install & Update
 
@@ -88,6 +93,13 @@ Use before committing to a big implementation, or when you want to find blind sp
 # Update templates (replaces agents + skills, preserves context files)
 ./install.sh --update /path/to/project
 ```
+
+## Customizing
+
+1. **Edit agent prompts** — replace generic tech references with your stack
+2. **Ensure CLAUDE.md is comprehensive** — all agents read it first
+3. **Add reference files** — put project-specific patterns in `skills/dev-*/references/`
+4. **Add onboarding questions** — edit `skills/dev-setup/SKILL.md` Phase 2, follow the existing pattern
 
 ## Prerequisites
 

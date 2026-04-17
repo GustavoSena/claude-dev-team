@@ -100,6 +100,7 @@ done
 echo ""
 echo "Done. Available commands:"
 echo ""
+echo "  /dev-setup                 Onboard: reads project, asks questions, prefills context"
 echo "  /dev-team <task>          Team orchestration (implement + quick verify)"
 echo "  /dev-team-full <task>     Full flow: implement → review → iterate (max 3 rounds)"
 echo "  /dev-grill <plan>         Stress-test a plan from every angle"
@@ -114,6 +115,7 @@ echo ""
 if $UPDATE; then
   echo "Templates updated. Context files (.claude/context/) preserved."
 else
-  echo "Tip: Ensure your project has a comprehensive CLAUDE.md —"
-  echo "     all agents read it as their first step."
+  echo "Next step: run /dev-setup in Claude Code to onboard the team."
+  echo "It reads your project, asks a few questions, and prefills all"
+  echo "agent context files so everything starts fast."
 fi
