@@ -91,7 +91,13 @@ Combine agent outputs into one coherent result:
 
 ## Context Maintenance
 
-Each invocation starts fresh. Re-read CLAUDE.md every time. For multi-session projects, the user maintains context in CLAUDE.md.
+Each agent maintains a working memory file in `.claude/context/<role>.md`. These files:
+- Are read at the start to skip re-exploration of known files and patterns
+- Are updated at the end with what was learned and changed
+- Stay under 100 lines each — working memory, not a full log
+- Are gitignored (machine-local, not shared)
+
+When spawning an agent, do NOT pass it context from another agent's file — each agent reads its own. The orchestrator's job is to pass *task-specific* context (API contracts, requirements) between agents, not to relay their memory files.
 
 ## Error Recovery
 

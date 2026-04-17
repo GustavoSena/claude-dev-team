@@ -13,9 +13,10 @@ When this skill is active, operate as a UX design specialist. Audit and recommen
 
 ## Pre-Flight
 
-1. Read `CLAUDE.md` for product context and target users
-2. Read the components being reviewed
-3. Identify the user flow: what sequence of actions does the user take?
+1. Read `.claude/context/ux-design.md` if it exists — check previous findings and what's been fixed
+2. Read `CLAUDE.md` for product context and target users
+3. Read the components being reviewed
+4. Identify the user flow: what sequence of actions does the user take?
 
 ## Review Framework
 
@@ -43,3 +44,7 @@ When this skill is active, operate as a UX design specialist. Audit and recommen
 ## Output Format
 
 For each finding: Issue → Impact (severity) → Recommendation → Reference
+
+## After Review
+
+Update `.claude/context/ux-design.md` with findings and their status (open/fixed).

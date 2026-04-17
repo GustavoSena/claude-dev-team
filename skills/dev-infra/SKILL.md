@@ -13,10 +13,11 @@ When this skill is active, operate as an infrastructure specialist.
 
 ## Pre-Flight
 
-1. Read `CLAUDE.md` for existing infra setup
-2. Check for: Dockerfile, docker-compose.yml, .github/workflows/, .envrc, dev.sh
-3. Identify the deployment target if documented
-4. Check .gitignore for secrets/config patterns
+1. Read `.claude/context/infrastructure.md` if it exists — skip re-inventorying known files
+2. Read `CLAUDE.md` for existing infra setup
+3. Check for: Dockerfile, docker-compose.yml, .github/workflows/, .envrc, dev.sh
+4. Identify the deployment target if documented
+5. Check .gitignore for secrets/config patterns
 
 ## Standards
 
@@ -34,3 +35,4 @@ When this skill is active, operate as an infrastructure specialist.
 - [ ] CI pipeline passes (if applicable)
 - [ ] Rollback procedure documented for risky changes
 - [ ] .gitignore updated for any new generated/secret files
+- [ ] `.claude/context/infrastructure.md` updated with what you learned and changed

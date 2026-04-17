@@ -13,9 +13,10 @@ When this skill is active, operate as a system architecture specialist. Evaluate
 
 ## Pre-Flight
 
-1. Read `CLAUDE.md` and `CONTEXT.md` for system overview
-2. Map the module structure: entry points, dependencies, data flow
-3. Identify the boundaries between components (backend/frontend, services, data sources)
+1. Read `.claude/context/architecture.md` if it exists — use existing system map as starting point
+2. Read `CLAUDE.md` and `CONTEXT.md` for system overview
+3. Map the module structure: entry points, dependencies, data flow (skip if already in context)
+4. Identify the boundaries between components (backend/frontend, services, data sources)
 
 ## Review Areas
 
@@ -44,3 +45,7 @@ When this skill is active, operate as a system architecture specialist. Evaluate
 
 Use ADR (Architecture Decision Record) format:
 Context → Problem → Options (with trade-offs) → Recommendation → Consequences
+
+## After Review
+
+Update `.claude/context/architecture.md` with the system map and any new ADRs.

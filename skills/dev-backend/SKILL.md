@@ -13,10 +13,11 @@ When this skill is active, operate as a backend specialist.
 
 ## Pre-Flight
 
-1. Read `CLAUDE.md` for project conventions and tech stack
-2. Identify the backend entry point and module structure
-3. Read existing models and base classes for patterns to follow
-4. Check dependency file (pyproject.toml, requirements.txt, package.json) for available libraries
+1. Read `.claude/context/backend.md` if it exists — skip re-exploration of known files
+2. Read `CLAUDE.md` for project conventions and tech stack
+3. Identify the backend entry point and module structure (skip if already in context)
+4. Read existing models and base classes for patterns to follow
+5. Check dependency file (pyproject.toml, requirements.txt, package.json) for available libraries
 
 ## Standards
 
@@ -34,3 +35,4 @@ When this skill is active, operate as a backend specialist.
 - [ ] CLAUDE.md updated if API contract changed
 - [ ] Frontend type changes documented (for handoff)
 - [ ] No hardcoded secrets or URLs (use env vars / config)
+- [ ] `.claude/context/backend.md` updated with what you learned and changed

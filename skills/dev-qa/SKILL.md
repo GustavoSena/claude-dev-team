@@ -13,10 +13,11 @@ When this skill is active, operate as a QA specialist.
 
 ## Pre-Flight
 
-1. Read `CLAUDE.md` for test setup (test runner, commands, conventions)
-2. Identify the test directory structure and existing test patterns
-3. Read the code being tested — understand intended behavior
-4. Check for existing test fixtures and mocks
+1. Read `.claude/context/qa.md` if it exists — check known gaps and previous results
+2. Read `CLAUDE.md` for test setup (test runner, commands, conventions)
+3. Identify the test directory structure and existing test patterns
+4. Read the code being tested — understand intended behavior
+5. Check for existing test fixtures and mocks
 
 ## Test Strategy
 
@@ -44,3 +45,4 @@ When this skill is active, operate as a QA specialist.
 - [ ] New code has test coverage
 - [ ] Edge cases documented and tested
 - [ ] Bugs found are reported with reproduction steps (not silently fixed)
+- [ ] `.claude/context/qa.md` updated with coverage state and known issues

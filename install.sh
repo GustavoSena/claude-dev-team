@@ -29,6 +29,22 @@ echo ""
 
 mkdir -p "$CLAUDE_DIR/agents"
 mkdir -p "$CLAUDE_DIR/skills"
+mkdir -p "$CLAUDE_DIR/context"
+
+# Ensure context directory is gitignored
+GITIGNORE="$TARGET/.gitignore"
+if [ -f "$GITIGNORE" ]; then
+  if ! grep -q '.claude/context/' "$GITIGNORE" 2>/dev/null; then
+    echo "" >> "$GITIGNORE"
+    echo "# Agent working memory (machine-local, not shared)" >> "$GITIGNORE"
+    echo ".claude/context/" >> "$GITIGNORE"
+    echo "  ADD   .gitignore entry for .claude/context/"
+  fi
+else
+  echo "# Agent working memory (machine-local, not shared)" > "$GITIGNORE"
+  echo ".claude/context/" >> "$GITIGNORE"
+  echo "  ADD   .gitignore with .claude/context/"
+fi
 
 # Copy agents
 for agent_file in "$SCRIPT_DIR/agents/"*.md; do

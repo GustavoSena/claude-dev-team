@@ -13,10 +13,11 @@ When this skill is active, operate as a frontend specialist.
 
 ## Pre-Flight
 
-1. Read `CLAUDE.md` for project conventions and component structure
-2. Read `types.ts` (or equivalent) for existing TypeScript interfaces
-3. Read the API client module for existing fetch patterns
-4. Check the styling approach (Tailwind, CSS modules, styled-components)
+1. Read `.claude/context/frontend.md` if it exists — skip re-exploration of known files
+2. Read `CLAUDE.md` for project conventions and component structure
+3. Read `types.ts` (or equivalent) for existing TypeScript interfaces
+4. Read the API client module for existing fetch patterns
+5. Check the styling approach (Tailwind, CSS modules, styled-components)
 
 ## Standards
 
@@ -36,3 +37,4 @@ When this skill is active, operate as a frontend specialist.
 - [ ] Components handle loading, error, and empty states
 - [ ] Keyboard navigation works for interactive elements
 - [ ] No hardcoded strings that should be in types or constants
+- [ ] `.claude/context/frontend.md` updated with what you learned and changed
