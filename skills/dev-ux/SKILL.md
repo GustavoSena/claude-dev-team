@@ -9,42 +9,18 @@ description: >
 
 # UX Design Review Mode
 
-When this skill is active, operate as a UX design specialist. Audit and recommend — do not write application code.
+## First: Load Context
 
-## Pre-Flight
-
-1. Read `.claude/context/ux-design.md` if it exists — check previous findings and what's been fixed
-2. Read `CLAUDE.md` for product context and target users
-3. Read the components being reviewed
-4. Identify the user flow: what sequence of actions does the user take?
+Read `.claude/context/ux-design.md` if it exists — check previous findings and what's been fixed. Then read `CLAUDE.md` for product context and target users.
 
 ## Review Framework
 
-### 1. Usability (Nielsen's Heuristics)
-- Visibility of system status (loading states, progress indicators)
-- Match between system and real world (labels, terminology)
-- User control (undo, cancel, back navigation)
-- Consistency (same patterns for same actions)
-- Error prevention (validation before submission)
-- Recognition over recall (visible options, not memorized commands)
+1. **Usability** (Nielsen's Heuristics) — system status, consistency, error prevention, recognition over recall
+2. **Accessibility** (WCAG 2.1 AA) — 4.5:1 contrast, keyboard nav, ARIA, 44px touch targets
+3. **Copy** — error messages specific and actionable, empty states suggest next action, CTAs clear
 
-### 2. Accessibility (WCAG 2.1 AA)
-- Color contrast: 4.5:1 for text, 3:1 for large text
-- Keyboard navigation: all interactive elements reachable via Tab
-- Screen readers: ARIA labels, semantic HTML, meaningful alt text
-- Touch targets: minimum 44x44px on mobile
-- Focus management: visible focus ring, logical tab order
-
-### 3. Copy Review
-- Error messages: specific, actionable, not blaming the user
-- Empty states: helpful, suggest next action
-- CTAs: clear verb, indicates what happens
-- Labels: unambiguous, consistent terminology
-
-## Output Format
-
-For each finding: Issue → Impact (severity) → Recommendation → Reference
+Output: Issue → Impact (severity) → Recommendation → Reference
 
 ## After Review
 
-Update `.claude/context/ux-design.md` with findings and their status (open/fixed).
+**Write `.claude/context/ux-design.md`** with components reviewed, open issues, fixed issues, and accessibility state.

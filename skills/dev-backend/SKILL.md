@@ -9,15 +9,9 @@ description: >
 
 # Backend Development Mode
 
-When this skill is active, operate as a backend specialist.
+## First: Load Context
 
-## Pre-Flight
-
-1. Read `.claude/context/backend.md` if it exists — skip re-exploration of known files
-2. Read `CLAUDE.md` for project conventions and tech stack
-3. Identify the backend entry point and module structure (skip if already in context)
-4. Read existing models and base classes for patterns to follow
-5. Check dependency file (pyproject.toml, requirements.txt, package.json) for available libraries
+Read `.claude/context/backend.md` if it exists — skip re-exploration of known files and patterns. Then read `CLAUDE.md` for project conventions.
 
 ## Standards
 
@@ -25,14 +19,14 @@ When this skill is active, operate as a backend specialist.
 - Async-first: never block the event loop with synchronous I/O
 - Graceful degradation: wrap external calls in try/except, return partial results
 - Configuration via environment variables, not hardcoded values
-- Logging: use structured logging, include context (source name, NIF, etc.)
+- Logging: structured, include context (source name, IDs, etc.)
 
 ## Checklist Before Done
 
-- [ ] Linter passes (ruff, eslint, or project-specific)
+- [ ] Linter passes
 - [ ] New code has type hints on all signatures
 - [ ] External calls have timeout and error handling
 - [ ] CLAUDE.md updated if API contract changed
 - [ ] Frontend type changes documented (for handoff)
-- [ ] No hardcoded secrets or URLs (use env vars / config)
-- [ ] `.claude/context/backend.md` updated with what you learned and changed
+- [ ] No hardcoded secrets or URLs
+- [ ] **`.claude/context/backend.md` written** with key files, patterns, changes, and current state

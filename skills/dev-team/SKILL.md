@@ -91,13 +91,14 @@ Combine agent outputs into one coherent result:
 
 ## Context Maintenance
 
-Each agent maintains a working memory file in `.claude/context/<role>.md`. These files:
-- Are read at the start to skip re-exploration of known files and patterns
-- Are updated at the end with what was learned and changed
-- Stay under 100 lines each — working memory, not a full log
-- Are gitignored (machine-local, not shared)
+Each agent maintains a working memory file in `.claude/context/<role>.md` (see `references/context-template.md` for format). These files save 5-10K tokens per invocation by avoiding full codebase re-exploration.
 
-When spawning an agent, do NOT pass it context from another agent's file — each agent reads its own. The orchestrator's job is to pass *task-specific* context (API contracts, requirements) between agents, not to relay their memory files.
+**Orchestrator responsibilities regarding context:**
+1. When spawning an agent, remind it in the prompt: "After completing the task, write your context file to `.claude/context/<role>.md`"
+2. After each agent returns, **verify** the context file was written. If it wasn't, write it yourself based on what the agent reported.
+3. Do NOT pass one agent's context file to another. Each agent reads its own. The orchestrator passes task-specific context (API contracts, requirements) between agents.
+
+Context files are gitignored and stay under 100 lines. They are replaced each time, not appended to.
 
 ## Error Recovery
 

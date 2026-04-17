@@ -1,17 +1,22 @@
 #!/bin/bash
-# install.sh — Install the multi-agent development team into a project
+# install.sh — Install or update the multi-agent development team into a project
 #
 # Usage:
-#   ./install.sh /path/to/your/project
-#   ./install.sh              # installs into current directory
+#   ./install.sh /path/to/project           # First install (skips existing files)
+#   ./install.sh --update /path/to/project   # Update existing files with latest templates
+#   ./install.sh --update                    # Update in current directory
 #
-# What it does:
-# 1. Copies agent definitions into .claude/agents/
-# 2. Copies skill definitions into .claude/skills/
-# 3. Does NOT overwrite existing files (safe to re-run)
-# 4. Does NOT touch settings.local.json, CLAUDE.md, or any other existing config
+# First install: adds files, never overwrites
+# Update mode:   replaces agents/ and skills/ with latest templates
+#                 preserves .claude/context/ (working memory) untouched
 
 set -euo pipefail
+
+UPDATE=false
+if [ "${1:-}" = "--update" ]; then
+  UPDATE=true
+  shift
+fi
 
 TARGET="${1:-.}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -24,7 +29,11 @@ fi
 TARGET="$(cd "$TARGET" && pwd)"
 CLAUDE_DIR="$TARGET/.claude"
 
-echo "Installing dev team into: $TARGET"
+if $UPDATE; then
+  echo "Updating dev team in: $TARGET"
+else
+  echo "Installing dev team into: $TARGET"
+fi
 echo ""
 
 mkdir -p "$CLAUDE_DIR/agents"
@@ -51,11 +60,15 @@ for agent_file in "$SCRIPT_DIR/agents/"*.md; do
   [ -f "$agent_file" ] || continue
   filename=$(basename "$agent_file")
   dest="$CLAUDE_DIR/agents/$filename"
-  if [ -f "$dest" ]; then
-    echo "  SKIP  agents/$filename (already exists)"
+  if [ -f "$dest" ] && ! $UPDATE; then
+    echo "  SKIP  agents/$filename (use --update to replace)"
   else
     cp "$agent_file" "$dest"
-    echo "  ADD   agents/$filename"
+    if $UPDATE; then
+      echo "  UPDATE  agents/$filename"
+    else
+      echo "  ADD     agents/$filename"
+    fi
   fi
 done
 
@@ -64,11 +77,16 @@ for skill_dir in "$SCRIPT_DIR/skills/"*/; do
   [ -d "$skill_dir" ] || continue
   skill_name=$(basename "$skill_dir")
   dest_dir="$CLAUDE_DIR/skills/$skill_name"
-  if [ -d "$dest_dir" ]; then
-    echo "  SKIP  skills/$skill_name/ (already exists)"
+  if [ -d "$dest_dir" ] && ! $UPDATE; then
+    echo "  SKIP  skills/$skill_name/ (use --update to replace)"
   else
+    rm -rf "$dest_dir"
     cp -r "$skill_dir" "$dest_dir"
-    echo "  ADD   skills/$skill_name/"
+    if $UPDATE; then
+      echo "  UPDATE  skills/$skill_name/"
+    else
+      echo "  ADD     skills/$skill_name/"
+    fi
   fi
 done
 
@@ -84,5 +102,9 @@ echo "  /dev-architecture <task>  System architecture review"
 echo "  /dev-qa <task>            Quality assurance & testing"
 echo "  /dev-product <task>       Product thinking & requirements"
 echo ""
-echo "Tip: Ensure your project has a comprehensive CLAUDE.md —"
-echo "     all agents read it as their first step."
+if $UPDATE; then
+  echo "Templates updated. Context files (.claude/context/) preserved."
+else
+  echo "Tip: Ensure your project has a comprehensive CLAUDE.md —"
+  echo "     all agents read it as their first step."
+fi

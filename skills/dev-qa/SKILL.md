@@ -9,33 +9,19 @@ description: >
 
 # QA Mode
 
-When this skill is active, operate as a QA specialist.
+## First: Load Context
 
-## Pre-Flight
-
-1. Read `.claude/context/qa.md` if it exists — check known gaps and previous results
-2. Read `CLAUDE.md` for test setup (test runner, commands, conventions)
-3. Identify the test directory structure and existing test patterns
-4. Read the code being tested — understand intended behavior
-5. Check for existing test fixtures and mocks
-
-## Test Strategy
-
-| Layer | What to test | Tools |
-|-------|-------------|-------|
-| Unit | Individual functions, pure logic, model validation | pytest / vitest |
-| Integration | API endpoints, database queries, source interactions | pytest with fixtures |
-| Smoke | Server starts, health check passes, basic search works | curl / fetch |
-| Edge cases | Empty input, Unicode, very long strings, timeouts, nulls | All layers |
+Read `.claude/context/qa.md` if it exists — check known gaps and previous results. Then read `CLAUDE.md` for test commands and conventions.
 
 ## Test Writing Rules
 
 - Test behavior, not implementation details
 - One assertion focus per test
 - Descriptive names: `test_<what>_<condition>_<expected>`
-- Mock external services (HTTP, databases), not internal logic
+- Mock external services, not internal logic
 - Test error paths as thoroughly as happy paths
-- No flaky tests: avoid timing-dependent assertions
+- Do NOT modify application logic to make tests pass — flag the bug
+- Do NOT skip or disable failing tests — report them
 
 ## Checklist Before Done
 
@@ -44,5 +30,5 @@ When this skill is active, operate as a QA specialist.
 - [ ] All existing tests still pass
 - [ ] New code has test coverage
 - [ ] Edge cases documented and tested
-- [ ] Bugs found are reported with reproduction steps (not silently fixed)
-- [ ] `.claude/context/qa.md` updated with coverage state and known issues
+- [ ] Bugs reported with reproduction steps (not silently fixed)
+- [ ] **`.claude/context/qa.md` written** with test commands, coverage state, known issues

@@ -9,50 +9,20 @@ description: >
 
 # Product Thinking Mode
 
-When this skill is active, operate as a product specialist. Define what to build and why — do not write code.
+## First: Load Context
 
-## Pre-Flight
-
-1. Read `.claude/context/product.md` if it exists — check existing stories, scope decisions, backlog
-2. Read `CLAUDE.md` and `CONTEXT.md` for product context
-3. Understand the target user and their workflow
-4. Review existing features to understand what the product already does
+Read `.claude/context/product.md` if it exists — check existing stories, scope decisions, backlog. Then read `CLAUDE.md` and `CONTEXT.md` for product context.
 
 ## Frameworks
 
-### User Stories
-```
-As a [persona],
-I want [action],
-so that [value].
-```
+- **User Stories**: As a [persona], I want [action], so that [value]
+- **Acceptance Criteria**: numbered, testable, unambiguous conditions
+- **Prioritization** (MoSCoW): Must / Should / Could / Won't
 
-### Acceptance Criteria
-Numbered list of testable conditions. Each criterion must be:
-- **Specific**: no ambiguous words ("fast", "good", "nice")
-- **Testable**: a QA agent can verify it passes or fails
-- **Independent**: each criterion stands alone
+Output: User story → Acceptance criteria → Out of scope → Dependencies → Priority rationale
 
-### Prioritization (MoSCoW)
-- **Must have**: without this, the feature is broken
-- **Should have**: important but the feature works without it
-- **Could have**: nice to have, do if time permits
-- **Won't have**: explicitly out of scope (prevents creep)
-
-## Output Format
-
-1. **User story** — persona, action, value
-2. **Acceptance criteria** — numbered, testable
-3. **Out of scope** — what this does NOT include
-4. **Dependencies** — what must exist first
-5. **Priority rationale** — why this matters now
-
-## Constraints
-
-- Do NOT write code or make technical decisions
-- Flag technical concerns for the architecture agent
-- Focus on WHAT, not HOW
+Rules: Do NOT write code. Flag technical concerns for architecture agent. Focus on WHAT, not HOW.
 
 ## After Session
 
-Update `.claude/context/product.md` with user stories, scope decisions, and backlog items.
+**Write `.claude/context/product.md`** with product summary, active stories, scope decisions, and backlog.
